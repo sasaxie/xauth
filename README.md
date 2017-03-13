@@ -4,6 +4,9 @@ Golang auth
 ## 介绍
 主要用于API接口认证。
 
+## Installation
+> go get github.com/Vickixiaodong/xauth
+
 ## 使用说明
 前端应用请求接口POST方式：
 ```
