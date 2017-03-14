@@ -9,21 +9,22 @@ import (
 
 var appData map[string] string
 
-func init() {
-    appData := make(map[string] string)
+func Init() {
+    appData = make(map[string] string)
     // 存放appKey和对应的secret
     appData["appKey"] = "appSecret"
 }
 
 // 测试整个流程
 func TestAll(t *testing.T) {
+    Init()
 	// appKey, targetSign, timestamp从get参数获取
 	// 用户计算sign的数据从 body json 获取
 	appKey := "appKey"
-	targetSign := "D41D8CD98F00B204E9800998ECF8427E"
-	var timestamp int64 = 1489485110000
+	targetSign := "BF74FE92B54480C3A296C3349DF71AA3"
+	var timestamp int64 = 1489485646000
 
-	jsonData := "{\"appKey\":\"appKey\",\"timestamp\":1489485110000}"
+	jsonData := "{\"appKey\":\"appKey\",\"timestamp\":1489485646000}"
 
 	req := new(Request)
 	json.Unmarshal([]byte(jsonData), req)
@@ -31,6 +32,12 @@ func TestAll(t *testing.T) {
 	// 1.param赋值，appSecret获取，timestamp赋值
 	a := new(XAuth)
 	a.AppSecret = appData[appKey]
+
+    if a.AppSecret == "" || len(a.AppSecret) == 0 {
+        log.Println("无效appKey")
+        return
+    }
+
 	a.Timestamp = timestamp
 
 	a.Params = req.Data
