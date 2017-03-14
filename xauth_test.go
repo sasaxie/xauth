@@ -7,17 +7,17 @@ import (
 	"testing"
 )
 
-var appData map[string] string
+var appData map[string]string
 
 func Init() {
-    appData = make(map[string] string)
-    // 存放appKey和对应的secret
-    appData["appKey"] = "appSecret"
+	appData = make(map[string]string)
+	// 存放appKey和对应的secret
+	appData["appKey"] = "appSecret"
 }
 
 // 测试整个流程
 func TestAll(t *testing.T) {
-    Init()
+	Init()
 	// appKey, targetSign, timestamp从get参数获取
 	// 用户计算sign的数据从 body json 获取
 	appKey := "appKey"
@@ -33,10 +33,10 @@ func TestAll(t *testing.T) {
 	a := new(XAuth)
 	a.AppSecret = appData[appKey]
 
-    if a.AppSecret == "" || len(a.AppSecret) == 0 {
-        log.Println("无效appKey")
-        return
-    }
+	if a.AppSecret == "" || len(a.AppSecret) == 0 {
+		log.Println("无效appKey")
+		return
+	}
 
 	a.Timestamp = timestamp
 
