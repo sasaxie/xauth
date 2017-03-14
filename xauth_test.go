@@ -7,25 +7,33 @@ import (
 	"testing"
 )
 
+var appData map[string] string
+
+func init() {
+    appData := make(map[string] string)
+    // 存放appKey和对应的secret
+    appData["appKey"] = "appSecret"
+}
+
 // 测试整个流程
 func TestAll(t *testing.T) {
 	// appKey, targetSign, timestamp从get参数获取
 	// 用户计算sign的数据从 body json 获取
 	appKey := "appKey"
-	targetSign := "368480924A6C78E2E8681551A7CF4C21"
-	var timestamp int64 = 1489387377000
+	targetSign := "D41D8CD98F00B204E9800998ECF8427E"
+	var timestamp int64 = 1489485110000
 
-	jsonData := "{\"appKey\":\"appKey\",\"timestamp\":1489387377000}"
+	jsonData := "{\"appKey\":\"appKey\",\"timestamp\":1489485110000}"
 
 	req := new(Request)
 	json.Unmarshal([]byte(jsonData), req)
 
 	// 1.param赋值，appSecret获取，timestamp赋值
 	a := new(XAuth)
-	a.AppSecret = appKey
+	a.AppSecret = appData[appKey]
 	a.Timestamp = timestamp
 
-	a.Params = req.data
+	a.Params = req.Data
 
 	// 2.判断是否过期
 	if a.IsExpired() {

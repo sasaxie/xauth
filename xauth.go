@@ -11,7 +11,7 @@ import (
 )
 
 type Request struct {
-	data XParamSlice
+	Data XParamSlice
 }
 
 type XParam struct {
