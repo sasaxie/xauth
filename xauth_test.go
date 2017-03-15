@@ -15,8 +15,9 @@ func Init() {
 	appData["appKey"] = "appSecret"
 }
 
-// 测试整个流程
-func TestAll(t *testing.T) {
+// TODO:body体支持复杂参数
+// 测试使用postbody体参数进行加密
+func TestPostBodyParams(t *testing.T) {
 	Init()
 	// appKey, targetSign, timestamp从get参数获取
 	// 用户计算sign的数据从 body json 获取
@@ -55,6 +56,55 @@ func TestAll(t *testing.T) {
 	}
 
 	log.Println("通过验证")
+}
+
+// 测试使用url连接参数进行加密
+func TestGetParams(t *testing.T) {
+    Init()
+    // appKey, targetSign, timestamp从get参数获取
+    // 用户计算sign的数据从 body json 获取
+    appKey := "appKey"
+    targetSign := "DB07596AA304F3BA6BBB74B42D9685F6"
+    var timestamp int64 = 1489546332000
+
+    req := new(Request)
+
+    ak := new(XParam)
+    ak.Key = "appKey"
+    ak.Value = "appKey"
+    ts := new(XParam)
+    ts.Key = "timestamp"
+    ts.Value = 1489546332000
+
+    req.Data = append(req.Data, ak)
+    req.Data = append(req.Data, ts)
+
+    // 1.param赋值，appSecret获取，timestamp赋值
+    a := new(XAuth)
+    a.AppSecret = appData[appKey]
+
+    if a.AppSecret == "" || len(a.AppSecret) == 0 {
+        log.Println("无效appKey")
+        return
+    }
+
+    a.Timestamp = timestamp
+
+    a.Params = req.Data
+
+    // 2.判断是否过期
+    if a.IsExpired() {
+        log.Println("失效")
+        return
+    }
+
+    // 3.判断sign参数是否和计算的sign相同
+    if !a.IsAuthPass(targetSign) {
+        log.Println("签名错误", a.Sign)
+        return
+    }
+
+    log.Println("通过验证")
 }
 
 // 测试key排序
