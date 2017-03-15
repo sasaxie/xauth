@@ -4,7 +4,6 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
-	"log"
 	"sort"
 	"strings"
 	"time"
@@ -85,8 +84,6 @@ func (a *XAuth) IsExpired() bool {
 
 	maxTime := paramTime.Add(time.Minute * 7)
 	minTime := paramTime.Add(-1 * time.Minute * 7)
-
-	log.Println(maxTime, minTime, currentTime)
 
 	if currentTime.Before(maxTime) && currentTime.After(minTime) {
 		return false
